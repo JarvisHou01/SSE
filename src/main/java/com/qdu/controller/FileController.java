@@ -10,8 +10,10 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.*;
 
 @Controller
@@ -77,6 +79,70 @@ public class FileController {
 
 
         return "redirect:/main.html";
+
+    }
+
+    @RequestMapping("/download")
+    @ResponseBody
+    public String downloadFile(@RequestParam("fid") int fid, HttpServletResponse response) throws UnsupportedEncodingException {
+
+        File download = fileService.download(fid);
+
+        java.io.File file = new java.io.File(download.getPath());
+
+        if (file.exists()){
+            // 配置文件下载
+            response.setHeader("content-type", "application/octet-stream");
+            response.setContentType("application/octet-stream");
+            // 下载文件能正常显示中文
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(download.getName(), "UTF-8"));
+            // 实现文件下载
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            OutputStream os = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+                return "successfully";
+            } catch (Exception e) {
+                return "failed";
+
+            } finally {
+                if (bis != null) {
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (os != null) {
+                    try {
+                        os.flush();
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+        }
+
+        return "";
 
     }
 
@@ -150,6 +216,8 @@ public class FileController {
 
         return same;
     }
+
+
 
 
 

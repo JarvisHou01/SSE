@@ -52,4 +52,5 @@ public interface FileMapper {
      * @return
      */
     List<File> getFilesByUid(int uid);
+
 }

@@ -37,18 +37,19 @@ public class FileService {
                       MultipartFile file,
                       int uid) throws IOException {
 
-        System.out.println("在FileService中的upload方法-----------------------------------");
         String path = "D:\\uploadfile\\" + file.getOriginalFilename();
-        System.out.println("文件存储的路径" + path);
-
-
         FileUtils.write(path, file.getInputStream());
-
         File fileToCommit = new File(name, md5, path, new Date(), uid);
-
         fileMapper.save(fileToCommit);
-
         return fileToCommit.getId();
+    }
+
+    public File download(int fid){
+        File file = new File();
+        file.setId(fid);
+
+        File file1 = fileMapper.getByFile(file);
+        return file1;
 
     }
 

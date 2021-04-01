@@ -37,15 +37,16 @@
             <th>文件名</th>
             <th>md5</th>
             <th>上传日期</th>
-            <th>操作</th>
+            <th>操作1</th>
+            <th>操作2</th>
         </tr>
 
         <!--/*@thymesVar id="files" type="templates"*/-->
         <tr th:each="f:${files}">
             <td style="font-weight: 300" th:text="${f.name}">文件名</td>
             <td style="font-weight: 300" th:text="${f.md5}">md5</td>
-            <td style="font-weight: 300" th:text="${#dates.format(f.uploadTime,'yyyy-MM-dd HH:mm')}">2020-02-02 15:08
-            </td>
+            <td style="font-weight: 300" th:text="${#dates.format(f.uploadTime,'yyyy-MM-dd HH:mm')}">2020-02-02 15:08</td>
+            <td style="font-weight: 300"><a th:href="@{/download(fid=${f.id})}"> download </a></td>
             <td style="font-weight: 300"><a th:href="@{/delete(fid=${f.id})}"> delete </a></td>
         </tr>
     </table>

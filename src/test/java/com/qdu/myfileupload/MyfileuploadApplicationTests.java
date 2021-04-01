@@ -33,9 +33,10 @@ class MyfileuploadApplicationTests {
 
     @Test
     void contextLoads() throws SQLException, IOException {
+        File file1 = new File();
+        file1.setId(9);
 
-
-        File file = fileMapper.getById(29);
+        File file = fileMapper.getByFile(file1);
 
         System.out.println(file);
     }

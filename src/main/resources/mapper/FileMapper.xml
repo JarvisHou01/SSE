@@ -74,7 +74,7 @@
             <if test="uploadTime != null">
                 and upload_time = #{uploadTime}
             </if>
-            <if test="uid != null">
+            <if test="uid != 0">
                 and uid = #{uid}
             </if>
         </where>
