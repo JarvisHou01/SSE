@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,12 +34,10 @@ class MyfileuploadApplicationTests {
 
     @Test
     void contextLoads() throws SQLException, IOException {
-        File file1 = new File();
-        file1.setId(9);
 
-        File file = fileMapper.getByFile(file1);
-
-        System.out.println(file);
+        String base = "test";
+        String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
+        System.out.println(md5);
     }
 
 }

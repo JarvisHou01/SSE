@@ -3,16 +3,12 @@ package com.qdu.controller;
 import com.qdu.pojo.User;
 import com.qdu.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -31,7 +27,7 @@ public class LoginController {
                         HttpSession session){
 
 
-        User user = new User(username, password);
+        User user = new User(username, DigestUtils.md5DigestAsHex(password.getBytes()));
 
         System.out.println("提交来的用户"+user);
 
@@ -59,7 +55,7 @@ public class LoginController {
                            @RequestParam("password") String password,
                            HttpSession session){
 
-        User newuser = new User(username, password);
+        User newuser = new User(username, DigestUtils.md5DigestAsHex(password.getBytes()));
         int add = userService.add(newuser);
 
         if (add==1){
