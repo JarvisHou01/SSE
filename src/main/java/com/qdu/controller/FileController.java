@@ -183,9 +183,10 @@ public class FileController {
 
         }
 
+        HashSet<File> files1 = new HashSet<>(files);
 
 
-        model.addAttribute("searchfiles", files);
+        model.addAttribute("searchfiles", files1);
         return "forward:/main.html";
 
 
