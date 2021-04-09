@@ -35,9 +35,11 @@ class MyfileuploadApplicationTests {
     @Test
     void contextLoads() throws SQLException, IOException {
 
-        String base = "test";
-        String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
-        System.out.println(md5);
+        List<File> filesByopeRange = fileMapper.getFilesByopeRange(1, 1000, 3000);
+
+        for (File file : filesByopeRange) {
+            System.out.println(file);
+        }
     }
 
 }

@@ -32,19 +32,20 @@ public class FileService {
      * @param md5
      * @param file
      */
-    public int upload(String name,
-                      String md5,
-                      MultipartFile file,
-                      int uid) throws IOException {
+    public int saveFile(String name,
+                        String md5,
+                        int ope,
+                        MultipartFile file,
+                        int uid) throws IOException {
 
         String path = "D:\\uploadfile\\" + file.getOriginalFilename();
         FileUtils.write(path, file.getInputStream());
-        File fileToCommit = new File(name, md5, path, new Date(), uid);
+        File fileToCommit = new File(name, md5, path, ope, new Date(), uid);
         fileMapper.save(fileToCommit);
         return fileToCommit.getId();
     }
 
-    public File download(int fid){
+    public File download(int fid) {
         File file = new File();
         file.setId(fid);
 
@@ -67,9 +68,17 @@ public class FileService {
     }
 
 
-    public File getById(int id){
+    public File getById(int id) {
         return fileMapper.getById(id);
     }
+
+    public List<File> getFileByope(int uid,int start,int end){
+
+        return fileMapper.getFilesByopeRange(uid, start, end);
+
+    }
+
+
 
 
 }

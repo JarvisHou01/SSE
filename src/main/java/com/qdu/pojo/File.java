@@ -20,16 +20,17 @@ public class File implements Serializable {
     private String name;
     private String md5;
     private String path;
+    private int ope;
     private Date uploadTime;
     private int uid;
 
 
-
-    public File(String name, String md5, String path, Date uploadTime,int uid) {
+    public File(String name, String md5, String path, int ope, Date uploadTime, int uid) {
         this.name = name;
         this.md5 = md5;
         this.path = path;
+        this.ope = ope;
         this.uploadTime = uploadTime;
-        this.uid=uid;
+        this.uid = uid;
     }
 }

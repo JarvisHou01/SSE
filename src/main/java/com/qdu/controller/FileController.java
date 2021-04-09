@@ -33,6 +33,7 @@ public class FileController {
                          // String md5,
                          @RequestParam("file") MultipartFile file,
                          @RequestParam("index") MultipartFile index,
+                         @RequestParam("ope") int ope,
                          HttpSession session) throws IOException {
 
         String md5 = DigestUtils.md5DigestAsHex(file.getInputStream());
@@ -45,7 +46,7 @@ public class FileController {
         System.out.println("文件md5值:" + md5);
         System.out.println("文件名:" + filename);
 
-        int fid = fileService.upload(filename, md5, file, uid);
+        int fid = fileService.saveFile(filename, md5,ope, file, uid);
 
         keywordService.addIndex(fid, index);
 
@@ -54,7 +55,7 @@ public class FileController {
     }
 
 
-    @RequestMapping("/main.html")
+    @RequestMapping(value={"/main.html","/"})
     public String dashBoard(HttpSession session, Model model) {
 
         int uid = (int) session.getAttribute("uid");
@@ -192,6 +193,25 @@ public class FileController {
 
 
     }
+
+
+    @RequestMapping("/opesearch")
+    public String opesearch(@RequestParam("startpoint") int startpoint,@RequestParam("endpoint") int endpoint, Model model,HttpSession session){
+
+        System.out.println("opesearch");
+
+        int uid = (int) session.getAttribute("uid");
+
+        List<File> files = fileService.getFileByope(uid, startpoint, endpoint);
+
+
+        model.addAttribute("opesearchfiles", files);
+        return "forward:/main.html";
+
+
+
+    }
+
 
 
     public static int[] findSameElementIn2Arrays(int[] array1,int[] array2) {

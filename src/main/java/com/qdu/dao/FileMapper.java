@@ -3,6 +3,7 @@ package com.qdu.dao;
 
 import com.qdu.pojo.File;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -52,5 +53,13 @@ public interface FileMapper {
      * @return
      */
     List<File> getFilesByUid(int uid);
+
+    /**
+     * 根据ope范围返回文件
+     * @param start
+     * @param end
+     * @return
+     */
+    List<File> getFilesByopeRange(@Param("uid")int uid, @Param("start")int start, @Param("end")int end);
 
 }
