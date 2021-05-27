@@ -1,127 +1,112 @@
 <!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <title>Dashboard</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <!--		<style type="text/css">-->
+    <!--			/* Chart.js */-->
+    <!--			-->
+    <!--			@-webkit-keyframes chartjs-render-animation {-->
+    <!--				from {-->
+    <!--					opacity: 0.99-->
+    <!--				}-->
+    <!--				to {-->
+    <!--					opacity: 1-->
+    <!--				}-->
+    <!--			}-->
+    <!--			-->
+    <!--			@keyframes chartjs-render-animation {-->
+    <!--				from {-->
+    <!--					opacity: 0.99-->
+    <!--				}-->
+    <!--				to {-->
+    <!--					opacity: 1-->
+    <!--				}-->
+    <!--			}-->
+    <!--			-->
+    <!--			.chartjs-render-monitor {-->
+    <!--				-webkit-animation: chartjs-render-animation 0.001s;-->
+    <!--				animation: chartjs-render-animation 0.001s;-->
+    <!--			}-->
+    <!--		</style>-->
 </head>
+
 <body>
+<div th:replace="~{commons/common::topbar}"></div>
 
 
-<h1>dashboard</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{commons/common::sidebar(active='main.html')}"></div>
 
-<a href="/">刷新本页面</a>&nbsp;
-<a href="/user/logout">退出登录</a>
-<br/><br/>
-
-<div id="submitbox" style="border: dashed;width:auto;display:inline-block !important;padding: 5px;">
-    <form method="post" action="/upload" enctype="multipart/form-data">
-        <span>索引文件: </span><input type="file" name="index" required><br/><br/>
-        <span>要提交的文件: </span><input type="file" name="file" required>
-        <p><span>ope(experimental): </span><input type="text" name="ope" required></p>
-        <br/>
-        <input type="submit" value="提交">
-
-    </form>
-
-</div>
-<br/><br/>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <h1>woshizhuye</h1>
+        </main>
 
 
 
-<div id="filelistbox">
-    <table border="1">
-        <tr>
-            <th>文件名</th>
-<!--            <th>md5</th>-->
-            <th>上传日期</th>
-            <th>ope</th>
-            <th>操作1</th>
-            <th>操作2</th>
-        </tr>
 
-        <!--/*@thymesVar id="files" type="templates"*/-->
-        <tr th:each="f:${files}">
-            <td style="font-weight: 300" th:text="${f.name}">文件名</td>
-<!--            <td style="font-weight: 300" th:text="${f.md5}">md5</td>-->
-            <td style="font-weight: 300" th:text="${#dates.format(f.uploadTime,'yyyy-MM-dd HH:mm')}">2020-02-02 15:08</td>
-            <td style="font-weight: 300" th:text="${f.ope}">ope</td>
-            <td style="font-weight: 300"><a th:href="@{/download(fid=${f.id})}"> download </a></td>
-            <td style="font-weight: 300"><a th:href="@{/delete(fid=${f.id})}"> delete </a></td>
-        </tr>
-    </table>
-</div>
-<br/><br/>
 
-<div id="searchbox" style="border: dashed;width:auto;display:inline-block !important;padding: 5px;">
-    <form action="/search">
-        <input type="text" name="trapdoor" placeholder="键入索引" style="width: 500px">
-        <input type="submit" value="搜索">
-    </form>
-    <br/>
-    <!--/*@thymesVar id="searchfiles" type="templates"*/-->
-    <div id="search" th:if="${searchfiles}">
-        <table border="1">
-            <tr>
-                <th>文件名</th>
-                <!--            <th>md5</th>-->
-                <th>上传日期</th>
-                <th>ope</th>
-                <th>操作1</th>
-                <th>操作1</th>
-            </tr>
-            
-            <tr th:each="f:${searchfiles}">
-                <td style="font-weight: 300" th:text="${f.name}">文件名</td>
-                <!--            <td style="font-weight: 300" th:text="${f.md5}">md5</td>-->
-                <td style="font-weight: 300" th:text="${#dates.format(f.uploadTime,'yyyy-MM-dd HH:mm')}">2020-02-02
-                    15:08
-                </td>
-                <td style="font-weight: 300" th:text="${f.ope}">ope</td>
-                <td style="font-weight: 300"><a th:href="@{/download(fid=${f.id})}"> download </a></td>
-                <td style="font-weight: 300"><a th:href="@{/delete(fid=${f.id})}"> delete </a></td>
-            </tr>
-        </table>
+<!--        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">-->
+<!--            <div class="chartjs-size-monitor"-->
+<!--                 style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">-->
+<!--                <div class="chartjs-size-monitor-expand"-->
+<!--                     style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">-->
+<!--                    <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>-->
+<!--                </div>-->
+<!--                <div class="chartjs-size-monitor-shrink"-->
+<!--                     style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">-->
+<!--                    <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">-->
+<!--                <h1 class="h2">Dashboard</h1>-->
+<!--                <div class="btn-toolbar mb-2 mb-md-0">-->
+<!--                    <div class="btn-group mr-2">-->
+<!--                        <button class="btn btn-sm btn-outline-secondary">Share</button>-->
+<!--                        <button class="btn btn-sm btn-outline-secondary">Export</button>-->
+<!--                    </div>-->
+<!--                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle">-->
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"-->
+<!--                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"-->
+<!--                             class="feather feather-calendar">-->
+<!--                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>-->
+<!--                            <line x1="16" y1="2" x2="16" y2="6"></line>-->
+<!--                            <line x1="8" y1="2" x2="8" y2="6"></line>-->
+<!--                            <line x1="3" y1="10" x2="21" y2="10"></line>-->
+<!--                        </svg>-->
+<!--                        This week-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <canvas class="my-4 chartjs-render-monitor" id="myChart" width="1076" height="454"-->
+<!--                    style="display: block; width: 1076px; height: 454px;"></canvas>-->
+<!--        </main>-->
+
+
     </div>
 </div>
-<br/><br/>
 
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 
-<div id="opebox" style="border: dashed;width:auto;display:inline-block !important;padding:5px;">
-    <form action="/opesearch">
-        <input type="text" name="startpoint" placeholder="起始位置" style="width: 250px">
-        <input type="text" name="endpoint" placeholder="结束位置" style="width: 250px">
-        <input type="submit" value="搜索">
-        <br/>
-    </form>
-    <div id="ope" th:if="${opesearchfiles}">
-        <table border="1">
-            <tr>
-                <th>文件名</th>
-                <!--            <th>md5</th>-->
-                <th>上传日期</th>
-                <th>ope</th>
-                <th>操作1</th>
-                <th>操作1</th>
-            </tr>
-
-            <tr th:each="f:${opesearchfiles}">
-                <td style="font-weight: 300" th:text="${f.name}">文件名</td>
-                <!--            <td style="font-weight: 300" th:text="${f.md5}">md5</td>-->
-                <td style="font-weight: 300" th:text="${#dates.format(f.uploadTime,'yyyy-MM-dd HH:mm')}">2020-02-02
-                    15:08
-                </td>
-                <td style="font-weight: 300" th:text="${f.ope}">ope</td>
-                <td style="font-weight: 300"><a th:href="@{/download(fid=${f.id})}"> download </a></td>
-                <td style="font-weight: 300"><a th:href="@{/delete(fid=${f.id})}"> delete </a></td>
-            </tr>
-        </table>
-    </div>
-
-</div>
 
 
 
 </body>
-</html>
 
+</html>

@@ -4,17 +4,21 @@ import com.qdu.pojo.File;
 import com.qdu.service.FileService;
 import com.qdu.service.KeywordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
+
+import static com.qdu.utils.FileUtils.findSameElementIn2Arrays;
 
 @Controller
 //@CrossOrigin
@@ -46,40 +50,44 @@ public class FileController {
         System.out.println("文件md5值:" + md5);
         System.out.println("文件名:" + filename);
 
-        int fid = fileService.saveFile(filename, md5,ope, file, uid);
+        int fid = fileService.saveFile(filename, md5, ope, file, uid);
 
         keywordService.addIndex(fid, index);
 
-        return "redirect:/main.html";
+//        return "redirect:/main.html";
+        return "component/upload";
 
     }
 
 
-    @RequestMapping(value={"/main.html","/"})
-    public String dashBoard(HttpSession session, Model model) {
-
-        int uid = (int) session.getAttribute("uid");
-
-        List<File> files = fileService.getAllByUid(uid);
-
-
-        model.addAttribute("files", files);
-
-
-        return "dashboard";
-    }
+//    @RequestMapping(value = {"/main.html", "/"})
+//    public String dashBoard(HttpSession session, Model model) {
+//
+//        int uid = (int) session.getAttribute("uid");
+//
+//        List<File> files = fileService.getAllByUid(uid);
+//
+//
+//        model.addAttribute("files", files);
+//
+//
+//        return "dashboard";
+//    }
 
 
     @RequestMapping("/delete")
-    public String deleteFile(@RequestParam("fid") int fid) {
+    public String deleteFile(@RequestParam("fid") int fid,@RequestParam("url") String url ) {
+
+        String[] split = url.split("/");
+        String comingPath = split[split.length - 1];
 
         fileService.deleteFileById(fid);
 
-
         keywordService.deleteByFid(fid);
 
+        return "component/"+comingPath;
 
-        return "redirect:/main.html";
+//        return "redirect:/main.html";
 
     }
 
@@ -91,7 +99,7 @@ public class FileController {
 
         java.io.File file = new java.io.File(download.getPath());
 
-        if (file.exists()){
+        if (file.exists()) {
             // 配置文件下载
             response.setHeader("content-type", "application/octet-stream");
             response.setContentType("application/octet-stream");
@@ -147,11 +155,12 @@ public class FileController {
 
     }
 
-    @RequestMapping("/search")
-    public String search(@RequestParam("trapdoor") String trapdoor, Model model){
+    @PostMapping("/search")
+    public String search(@RequestParam("trapdoor") String trapdoor, @RequestParam(value = "phraseCheckBox", required = false) String checkbox, Model model,HttpSession session) {
 
-        System.out.println("进入了search");
-        if (null==trapdoor||"".equals(trapdoor)){
+        int uid = (int) session.getAttribute("uid");
+
+        if (null == trapdoor || "".equals(trapdoor)) {
             return "redirect:/main.html";
         }
 
@@ -159,44 +168,67 @@ public class FileController {
 
         String[] trapdoors = trapdoor.split(" ");
 
-        // 单关键词
-        if (trapdoors.length == 1){
-            int[] search = keywordService.search(trapdoor);
-            for (int i : search) {
-                files.add(fileService.getById(i));
+        if (checkbox == null) {
+            // 单关键词
+            if (trapdoors.length == 1) {
+                int[] search = keywordService.search(trapdoor);
+                for (int i : search) {
+                    File file = fileService.getById(i);
+                    if (file.getUid() == uid) {
+                        files.add(file);
+                    }
+                }
+            } else {
+                // 多关键词
+                int[] search1 = keywordService.search(trapdoors[0]);
+                int[] search2 = keywordService.search(trapdoors[1]);
+
+                int[] same = findSameElementIn2Arrays(search1, search2);
+
+                for (int i = 2; i < trapdoors.length; i++) {
+                    int[] search = keywordService.search(trapdoors[i]);
+                    same = findSameElementIn2Arrays(same, search);
+                }
+
+                for (int i : same) {
+                    File file = fileService.getById(i);
+                    if (file.getUid() == uid) {
+                        files.add(file);
+                    }
+                }
+
             }
-        }else {// 多关键词
+        }else {
+            // 词组搜索
 
-            int[] search1=keywordService.search(trapdoors[0]);
-            int[] search2=keywordService.search(trapdoors[1]);
+            int[] phraseSearch = keywordService.phraseSearch(trapdoors);
 
-            int[] same = findSameElementIn2Arrays(search1, search2);
+            for (int i : phraseSearch) {
+                File file = fileService.getById(i);
+                if (file.getUid() == uid) {
+                    files.add(file);
+                }
 
-            for (int i = 2; i < trapdoors.length; i++) {
-                int[] search = keywordService.search(trapdoors[i]);
-                same = findSameElementIn2Arrays(same,search);
             }
-
-            for (int i : same) {
-                files.add(fileService.getById(i));
-            }
-
-
+            
         }
+
 
         HashSet<File> files1 = new HashSet<>(files);
 
 
         model.addAttribute("searchfiles", files1);
-        return "forward:/main.html";
 
+
+//        return "forward:/main.html";
+        return "component/search";
 
 
     }
 
 
-    @RequestMapping("/opesearch")
-    public String opesearch(@RequestParam("startpoint") int startpoint,@RequestParam("endpoint") int endpoint, Model model,HttpSession session){
+    @PostMapping("/opesearch")
+    public String opesearch(@RequestParam("startpoint") int startpoint, @RequestParam("endpoint") int endpoint, Model model, HttpSession session) {
 
         System.out.println("opesearch");
 
@@ -206,38 +238,12 @@ public class FileController {
 
 
         model.addAttribute("opesearchfiles", files);
-        return "forward:/main.html";
 
+//        return "forward:/main.html";
+        return "component/opesearch";
 
 
     }
-
-
-
-    public static int[] findSameElementIn2Arrays(int[] array1,int[] array2) {
-
-        Set<Integer> sameElementSet = new HashSet<Integer>();//用来存放两个数组中相同的元素
-        Set<Integer> tempSet = new HashSet<Integer>();//用来存放数组1中的元素
-
-        for(int i=0;i<array1.length;i++) {
-            tempSet.add(array1[i]);//把数组1中的元素放到Set中，可以去除重复的元素
-        }
-
-        for(int j=0;j<array2.length;j++) {
-            //把数组2中的元素添加到tempSet中
-            //如果tempSet中已存在相同的元素，则tempSet.add(array2[j])返回false
-            if(!tempSet.add(array2[j])) {
-                //返回false,说明当前元素是两个数组中相同的元
-                sameElementSet.add(array2[j]);
-            }
-        }
-
-        Integer[] integers = sameElementSet.toArray(new Integer[sameElementSet.size()]);
-        int[] same = Arrays.stream(integers).mapToInt(Integer::valueOf).toArray();
-
-        return same;
-    }
-
 
 
 

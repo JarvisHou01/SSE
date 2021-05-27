@@ -14,4 +14,6 @@ public interface KeywordMapper {
 
     int[] search(String trapdoor);
 
+    String[] searchPositionByFidAndKeyword(String keyword,int fid);
+
 }

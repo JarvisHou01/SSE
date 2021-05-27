@@ -6,6 +6,7 @@
         <id column="id" property="id"/>
         <result column="keyword" property="keyword"/>
         <result column="fid" property="fid"/>
+        <result column="position" property="position"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -14,7 +15,7 @@
 
 
     <insert id="add" parameterType="com.qdu.pojo.Keyword" keyProperty="id" useGeneratedKeys="true">
-        insert into Keyword(keyword,fid) values(#{keyword},#{fid})
+        insert into Keyword(keyword,fid,position) values(#{keyword},#{fid},#{position})
     </insert>
 
     <delete id="deleteByFid" parameterType="java.lang.Integer">
@@ -24,5 +25,10 @@
     <select id="search" parameterType="string" resultType="java.lang.Integer">
         select fid from keyword where keyword = #{value}
     </select>
+
+    <select id="searchPositionByFidAndKeyword" resultType="java.lang.String">
+        select position from keyword where keyword = #{param1} and fid = #{param2}
+    </select>
+
 
 </mapper>
