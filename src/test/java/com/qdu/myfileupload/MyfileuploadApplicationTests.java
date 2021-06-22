@@ -3,24 +3,16 @@ package com.qdu.myfileupload;
 import com.qdu.dao.FileMapper;
 import com.qdu.dao.KeywordMapper;
 import com.qdu.dao.UserMapper;
-import com.qdu.pojo.File;
-import com.qdu.pojo.Keyword;
-import com.qdu.pojo.User;
 import com.qdu.result.Result;
 import com.qdu.result.ResultFactory;
-import com.qdu.service.KeywordService;
+import com.qdu.service.KeywordServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 @SpringBootTest
 class MyfileuploadApplicationTests {
@@ -35,7 +27,7 @@ class MyfileuploadApplicationTests {
     KeywordMapper keywordMapper;
 
     @Autowired
-    KeywordService keywordService;
+    KeywordServiceImpl keywordServiceImpl;
 
 
 

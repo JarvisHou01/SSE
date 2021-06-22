@@ -1,7 +1,6 @@
 package com.qdu.result;
 
-
-public enum  StatusCode {
+public enum StatusCode {
     SUCCESS(200),
     FAIL(400);
     public int code;
@@ -9,4 +8,5 @@ public enum  StatusCode {
     StatusCode(int code) {
         this.code = code;
     }
+
 }

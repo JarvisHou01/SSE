@@ -8,9 +8,6 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Getter
-@Setter
 public class Keyword {
     private int id;
     private String keyword;

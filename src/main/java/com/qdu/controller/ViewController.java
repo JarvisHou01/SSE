@@ -2,26 +2,20 @@ package com.qdu.controller;
 
 
 import com.qdu.pojo.File;
-import com.qdu.service.FileService;
+import com.qdu.service.FileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
 public class ViewController {
 
     @Autowired
-    private FileService fileService;
+    private FileServiceImpl fileServiceImpl;
 
     @GetMapping("/upload")
     public String upload() {
@@ -40,7 +34,7 @@ public class ViewController {
     public String myfile(HttpSession session, Model model) {
 
         int uid = (int) session.getAttribute("uid");
-        List<File> files = fileService.getAllByUid(uid);
+        List<File> files = fileServiceImpl.getAllByUid(uid);
 
 
         model.addAttribute("files", files);

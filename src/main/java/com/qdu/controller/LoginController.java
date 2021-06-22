@@ -3,7 +3,7 @@ package com.qdu.controller;
 import com.qdu.pojo.User;
 import com.qdu.result.Result;
 import com.qdu.result.ResultFactory;
-import com.qdu.service.UserService;
+import com.qdu.service.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class LoginController {
 
 
     @Resource
-    private UserService userService;
+    private UserServiceImpl userService;
 
 
 
@@ -49,39 +49,6 @@ public class LoginController {
 
             return "redirect:/index";
         }
-
-    }
-
-    @RequestMapping(value = "/api/user/login", method = RequestMethod.POST)
-    @ResponseBody
-    public Result loginApi(@RequestParam("username") String username,
-                           @RequestParam("password") String password,
-                           HttpSession session){
-
-        User user = new User(username, DigestUtils.md5DigestAsHex(password.getBytes()));
-
-        System.out.println("通过api提交来的用户"+user);
-
-        User login = userService.login(user);
-        System.out.println("通过api查询到的用户"+login);
-
-        if (login!= null){
-
-            session.setAttribute("loginuser",username);
-            session.setAttribute("uid",login.getId());
-
-
-            HashMap<Object, Object> data = new HashMap<>();
-
-            data.put("username",username);
-            data.put("uid",login.getId());
-
-            return ResultFactory.buildSuccessResult(data,"登录成功");
-
-
-        }
-
-        return ResultFactory.buildFailResult("登录失败");
 
     }
 

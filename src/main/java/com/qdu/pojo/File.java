@@ -11,9 +11,6 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Getter
-@Setter
 public class File implements Serializable {
 
     private int id;
@@ -25,12 +22,5 @@ public class File implements Serializable {
     private int uid;
 
 
-    public File(String name, String md5, String path, int ope, Date uploadTime, int uid) {
-        this.name = name;
-        this.md5 = md5;
-        this.path = path;
-        this.ope = ope;
-        this.uploadTime = uploadTime;
-        this.uid = uid;
-    }
+
 }

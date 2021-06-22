@@ -8,17 +8,14 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Getter
-@Setter
 public class User {
 
     private int id;
-    private String name;
+    private String username;
     private String password;
 
-    public User(String name,String password){
-        this.name=name;
+    public User(String username,String password){
+        this.username=username;
         this.password=password;
     }
 

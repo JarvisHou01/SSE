@@ -1,17 +1,14 @@
 package com.qdu.controller;
 
 import com.qdu.pojo.File;
-import com.qdu.service.FileService;
-import com.qdu.service.KeywordService;
+import com.qdu.service.FileServiceImpl;
+import com.qdu.service.KeywordServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
@@ -21,21 +18,18 @@ import java.util.*;
 import static com.qdu.utils.FileUtils.findSameElementIn2Arrays;
 
 @Controller
-//@CrossOrigin
 public class FileController {
 
 
     @Autowired
-    private FileService fileService;
+    private FileServiceImpl fileService;
 
     @Autowired
-    private KeywordService keywordService;
+    private KeywordServiceImpl keywordService;
 
 
     @PostMapping("/upload")
-    public String upload(// String name,
-                         // String md5,
-                         @RequestParam("file") MultipartFile file,
+    public String upload(@RequestParam("file") MultipartFile file,
                          @RequestParam("index") MultipartFile index,
                          @RequestParam("ope") int ope,
                          HttpSession session) throws IOException {
@@ -54,26 +48,9 @@ public class FileController {
 
         keywordService.addIndex(fid, index);
 
-//        return "redirect:/main.html";
         return "component/upload";
 
     }
-
-
-//    @RequestMapping(value = {"/main.html", "/"})
-//    public String dashBoard(HttpSession session, Model model) {
-//
-//        int uid = (int) session.getAttribute("uid");
-//
-//        List<File> files = fileService.getAllByUid(uid);
-//
-//
-//        model.addAttribute("files", files);
-//
-//
-//        return "dashboard";
-//    }
-
 
     @RequestMapping("/delete")
     public String deleteFile(@RequestParam("fid") int fid,@RequestParam("url") String url ) {
@@ -87,7 +64,6 @@ public class FileController {
 
         return "component/"+comingPath;
 
-//        return "redirect:/main.html";
 
     }
 
@@ -219,8 +195,6 @@ public class FileController {
 
         model.addAttribute("searchfiles", files1);
 
-
-//        return "forward:/main.html";
         return "component/search";
 
 
@@ -236,10 +210,8 @@ public class FileController {
 
         List<File> files = fileService.getFileByope(uid, startpoint, endpoint);
 
-
         model.addAttribute("opesearchfiles", files);
 
-//        return "forward:/main.html";
         return "component/opesearch";
 
 

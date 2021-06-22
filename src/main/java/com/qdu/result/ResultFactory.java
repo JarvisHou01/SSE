@@ -1,6 +1,5 @@
 package com.qdu.result;
 
-
 public class ResultFactory {
 
     public static Result buildSuccessResult(Object data,String message) {
@@ -11,8 +10,8 @@ public class ResultFactory {
         return buildResult(null,message,StatusCode.FAIL.code);
     }
 
+
     public static Result buildResult(Object data, String message,Integer resultCode) {
         return new Result(data, message, resultCode);
     }
-
 }
